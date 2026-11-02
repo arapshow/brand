@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<script>if(/^ko/i.test(navigator.language||'')){document.documentElement.translate=false;document.head.append(Object.assign(document.createElement('meta'),{name:'google',content:'notranslate'}))}</script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>브랜드 네이밍 리서치 · brand.arapshow.net</title>
+<meta name="description" content="이름을 정하기 전에 가볍게 살펴보세요. 도메인 조회, 상표 확인 링크, 영어 표기·변형 제안, 로고 시안, 브리핑 PDF.">
+<meta property="og:title" content="브랜드 네이밍 리서치 : brand.arapshow.net">
+<meta property="og:url" content="https://brand.arapshow.net/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=DM+Serif+Display&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=Jost:wght@300;400;600;700&family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+KR:wght@600;900&family=Space+Grotesk:wght@400;600;700&display=swap">
+<link rel="icon" href="/favicon.svg?v=1" type="image/svg+xml">
+<link rel="stylesheet" href="/css/brand.css?v=1">
+</head>
+<body>
+<main class="wrap">
+  <header class="top" translate="no">
+    <div class="topline">
+      <p class="eyebrow">brand.arapshow.net</p>
+      <div class="lang" role="group" aria-label="language"><button type="button" data-lang="ko">KOR</button><button type="button" data-lang="en">ENG</button><button type="button" data-lang="ja">JPN</button></div>
+    </div>
+    <h1 data-i18n="title">브랜드 네이밍 리서치</h1>
+    <p class="sub" data-i18n="sub" translate="yes">이름을 짓기 전에, 먼저 가볍게 살펴보세요.</p>
+  </header>
+
+  <form class="finder" id="form" autocomplete="off">
+    <input id="q" type="text" maxlength="40" inputmode="text" autocapitalize="off" spellcheck="false" data-i18n-ph="ph" placeholder="브랜드 이름 (한글·영문·일문)">
+    <button type="submit" id="go" data-i18n="go">조사 시작</button>
+  </form>
+  <p class="hint" data-i18n="hint">초기 아이디어 단계용 참고 조사입니다. 정식 조사는 아래 링크에서 직접 하세요.</p>
+
+  <div id="result" hidden>
+    <div class="print-head"><b data-i18n="pdfTitle">브랜드 네이밍 브리핑</b><span id="pdfMeta"></span></div>
+
+    <section class="card" id="sec-domain">
+      <h2><span data-i18n="h_domain">도메인</span><span class="stars" id="domainStars" aria-live="polite"></span></h2>
+      <p class="note" id="domainNote"></p>
+      <div class="chips" id="domainChips"></div>
+    </section>
+
+    <section class="card" id="sec-tm">
+      <h2 data-i18n="h_tm">상표 확인</h2>
+      <p class="note" data-i18n="tmNote">같은 이름이 있는지, 소리·뜻이 비슷한 이름이 같은 분야에 있는지 보세요. 보신 뒤 체크해 두면 PDF에 담깁니다.</p>
+      <div class="tm" id="tmList"></div>
+      <ul class="tips">
+        <li data-i18n="tip1">같은 철자뿐 아니라 발음·뜻이 비슷한 이름도 거절 사유가 됩니다.</li>
+        <li data-i18n="tip2">내 상품·서비스와 같은 분야(니스 분류)에서 겹치는지가 핵심입니다.</li>
+        <li data-i18n="tip3">등록된 것뿐 아니라 '출원 중'인 것도 확인하세요.</li>
+      </ul>
+    </section>
+
+    <section class="card" id="sec-en" hidden>
+      <h2 data-i18n="h_en">영어 표기 제안</h2>
+      <p class="note" data-i18n="enNote">국어 로마자 표기법 기반의 기계 변환입니다. 뜻 번역은 하지 않습니다.</p>
+      <div class="chips" id="enChips"></div>
+    </section>
+
+    <section class="card" id="sec-var">
+      <h2 data-i18n="h_var">.com 변형 제안</h2>
+      <p class="note" id="varNote"></p>
+      <div class="chips" id="varChips"></div>
+      <button type="button" class="ghost" id="varBtn" data-i18n="varBtn">변형 도메인 조회</button>
+    </section>
+
+    <section class="card" id="sec-idea">
+      <h2 data-i18n="h_idea">발상 도우미 링크</h2>
+      <div class="links" id="ideaLinks"></div>
+    </section>
+
+    <section class="card" id="sec-logo">
+      <h2 data-i18n="h_logo">심볼 + 로고 시안</h2>
+      <p class="note" data-i18n="logoNote">발상용 시안입니다. 기존 로고와 비슷하지 않은지는 따로 확인하세요.</p>
+      <div class="logos" id="logos"></div>
+      <button type="button" class="ghost no-print" id="shuffle" data-i18n="shuffle">다시 섞기</button>
+    </section>
+
+    <section class="card" id="sec-memo">
+      <h2 data-i18n="h_memo">메모</h2>
+      <textarea id="memo" rows="3" data-i18n-ph="memoPh" placeholder="이 이름을 고른 이유, 확인할 것…"></textarea>
+    </section>
+
+    <div class="actions no-print">
+      <button type="button" id="pdf" data-i18n="pdf">브리핑 PDF 인쇄 / 저장</button>
+    </div>
+    <p class="disclaimer" data-i18n="disc">이 결과는 참고용이며 법률 자문이 아닙니다. 등록 가능성은 공식 검색과 전문가(변리사) 검토로 확인하세요. 입력한 이름은 서버에 저장하지 않습니다.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="brand-foot" data-arapshow-foot data-foot="contact support share" data-admin="here" data-share-url="https://brand.arapshow.net/" data-share-title="브랜드 네이밍 리서치 : brand.arapshow.net"></div>
+</footer>
+<div class="toast" id="toast" role="status"></div>
+<script type="module" src="/js/brand.js?v=1"></script>
+<script type="module" src="https://arapshow.net/lib/inquiry.js?v=3"></script>
+<link rel="stylesheet" href="https://arapshow.net/lib/site-foot.css?v=25" data-site-foot>
+<script type="module" src="https://arapshow.net/lib/site-foot.js?v=25"></script>
+<script type="module" src="https://arapshow.net/lib/support.js?v=3"></script>
+<script type="module" src="https://arapshow.net/lib/visit.js?v=2"></script>
+</body>
+</html>
