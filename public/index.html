@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=DM+Serif+Display&family=IBM+Plex+Sans+KR:wght@300;400;500;600;700&family=Jost:wght@300;400;600;700&family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+KR:wght@600;900&family=Space+Grotesk:wght@400;600;700&display=swap">
 <link rel="icon" href="/favicon.svg?v=1" type="image/svg+xml">
-<link rel="stylesheet" href="/css/brand.css?v=1">
+<link rel="stylesheet" href="/css/brand.css?v=2">
 </head>
 <body>
 <main class="wrap">
@@ -30,6 +30,11 @@
     <input id="q" type="text" maxlength="40" inputmode="text" autocapitalize="off" spellcheck="false" data-i18n-ph="ph" placeholder="브랜드 이름 (한글·영문·일문)">
     <button type="submit" id="go" data-i18n="go">조사 시작</button>
   </form>
+  <div class="opts">
+    <p class="optnote" data-i18n="f_opt">선택 입력 (안 해도 됩니다. 입력하면 마지막에 네이밍 코멘트가 더 구체적이에요)</p>
+    <label class="optrow"><span data-i18n="f_field">분야</span><select id="field"></select></label>
+    <div class="optrow"><span data-i18n="f_concept">컨셉 (2개까지)</span><div class="cchips" id="concepts"></div></div>
+  </div>
   <p class="hint" data-i18n="hint">초기 아이디어 단계용 참고 조사입니다. 정식 조사는 아래 링크에서 직접 하세요.</p>
 
   <div id="result" hidden>
@@ -77,6 +82,13 @@
       <button type="button" class="ghost no-print" id="shuffle" data-i18n="shuffle">다시 섞기</button>
     </section>
 
+    <section class="card" id="sec-comment">
+      <h2 data-i18n="h_comment">네이밍 코멘트</h2>
+      <p class="verdict" id="cmVerdict"></p>
+      <ul class="cmlist" id="cmList"></ul>
+      <p class="note" id="cmRule"></p>
+    </section>
+
     <section class="card" id="sec-memo">
       <h2 data-i18n="h_memo">메모</h2>
       <textarea id="memo" rows="3" data-i18n-ph="memoPh" placeholder="이 이름을 고른 이유, 확인할 것…"></textarea>
@@ -93,7 +105,7 @@
   <div class="brand-foot" data-arapshow-foot data-foot="contact support share" data-admin="here" data-share-url="https://brand.arapshow.net/" data-share-title="브랜드 네이밍 리서치 : brand.arapshow.net"></div>
 </footer>
 <div class="toast" id="toast" role="status"></div>
-<script type="module" src="/js/brand.js?v=2"></script>
+<script type="module" src="/js/brand.js?v=3"></script>
 <script type="module" src="https://arapshow.net/lib/inquiry.js?v=3"></script>
 <link rel="stylesheet" href="https://arapshow.net/lib/site-foot.css?v=25" data-site-foot>
 <script type="module" src="https://arapshow.net/lib/site-foot.js?v=25"></script>

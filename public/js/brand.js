@@ -1,3 +1,4 @@
+import { FIELDS, CONCEPTS, buildComment } from './comment.js?v=1';
 // 브랜드 네이밍 리서치 — 화면 로직. 입력한 이름은 서버에 저장하지 않고, 도메인 조회만 /api/domain으로 중계한다.
 const T = {
   ko: { title: '브랜드 네이밍 리서치', sub: '이름을 짓기 전에, 먼저 가볍게 살펴보세요.', ph: '브랜드 이름 (한글·영문·일문)', go: '조사 시작',
@@ -6,7 +7,7 @@ const T = {
     tip1: '같은 철자뿐 아니라 발음·뜻이 비슷한 이름도 거절 사유가 됩니다.', tip2: '내 상품·서비스와 같은 분야(니스 분류)에서 겹치는지가 핵심입니다.', tip3: "등록된 것뿐 아니라 '출원 중'인 것도 확인하세요.",
     h_en: '영어 표기 제안', enNote: '국어 로마자 표기법 기반의 기계 변환입니다. 뜻 번역은 하지 않습니다.', h_var: '.com 변형 제안', varBtn: '변형 도메인 조회',
     h_idea: '발상 도우미 링크', h_logo: '심볼 + 로고 시안', logoNote: '발상용 시안입니다. 기존 로고와 비슷하지 않은지는 따로 확인하세요.', shuffle: '다시 섞기',
-    h_memo: '메모', memoPh: '이 이름을 고른 이유, 확인할 것…', pdf: '브리핑 PDF 인쇄 / 저장',
+    f_opt: '선택 입력 (안 해도 됩니다. 입력하면 마지막 네이밍 코멘트가 더 구체적이에요)', f_field: '분야', f_concept: '컨셉 (2개까지)', f_none: '선택 안 함', h_comment: '네이밍 코멘트', fieldLabel: '분야', conceptLabel: '컨셉', h_memo: '메모', memoPh: '이 이름을 고른 이유, 확인할 것…', pdf: '브리핑 PDF 인쇄 / 저장',
     disc: '이 결과는 참고용이며 법률 자문이 아닙니다. 등록 가능성은 공식 검색과 전문가(변리사) 검토로 확인하세요. 입력한 이름은 서버에 저장하지 않습니다.',
     free: '가능', taken: '사용 중', unknown: '확인 불가', checking: '조회 중…', comOk: '.com 사용 가능', comNo: '.com은 이미 사용 중이에요', domainNeedsLatin: '영문 이름이 있어야 도메인을 조회할 수 있어요. 아래 영어 표기 제안을 눌러 보세요.',
     open: '열기', copyOpen: '복사 후 열기', st0: '미확인', st1: '깨끗해 보임', st2: '비슷한 것 있음', st3: '같은 것 있음', copied: '이름을 복사했어요. 검색창에 붙여넣으세요.',
@@ -19,7 +20,7 @@ const T = {
     tip1: 'Similar sound or meaning can be grounds for refusal, not just identical spelling.', tip2: 'What matters is overlap in your own class of goods/services (Nice class).', tip3: "Check pending applications too, not only registered marks.",
     h_en: 'English spellings', enNote: 'Mechanical romanization (Revised Romanization). Meaning is not translated.', h_var: '.com variations', varBtn: 'Check variations',
     h_idea: 'Idea-hunting links', h_logo: 'Symbol + logo drafts', logoNote: 'Drafts for inspiration. Check separately that they do not resemble existing logos.', shuffle: 'Shuffle',
-    h_memo: 'Notes', memoPh: 'Why this name, what to verify…', pdf: 'Print / save brief as PDF',
+    f_opt: 'Optional (skip if you like. Filling these makes the final naming comments more specific)', f_field: 'Field', f_concept: 'Concept (up to 2)', f_none: 'Not selected', h_comment: 'Naming comments', fieldLabel: 'Field', conceptLabel: 'Concept', h_memo: 'Notes', memoPh: 'Why this name, what to verify…', pdf: 'Print / save brief as PDF',
     disc: 'For reference only, not legal advice. Confirm registrability with official searches and an IP professional. The name you enter is not stored on a server.',
     free: 'free', taken: 'taken', unknown: 'unknown', checking: 'checking…', comOk: '.com is available', comNo: '.com is already taken', domainNeedsLatin: 'A Latin-letter name is needed to check domains. Try the English spellings below.',
     open: 'Open', copyOpen: 'Copy & open', st0: 'Not checked', st1: 'Looks clear', st2: 'Similar found', st3: 'Identical found', copied: 'Name copied. Paste it into the search box.',
@@ -32,7 +33,7 @@ const T = {
     tip1: '綴りが同じでなくても、音・意味が似ていると拒絶理由になります。', tip2: '自分の商品・サービスと同じ区分（ニース分類）で重なるかが重要です。', tip3: '登録済みだけでなく「出願中」も確認しましょう。',
     h_en: '英語表記の提案', enNote: '韓国語ローマ字表記による機械変換です。意味の翻訳はしません。', h_var: '.com の別案', varBtn: '別案のドメインを調べる',
     h_idea: '発想のヒントリンク', h_logo: 'シンボル + ロゴ案', logoNote: '発想用の案です。既存のロゴに似ていないか別途確認してください。', shuffle: 'シャッフル',
-    h_memo: 'メモ', memoPh: 'この名前を選んだ理由、確認すること…', pdf: 'ブリーフをPDFで印刷／保存',
+    f_opt: '任意入力（空でも可。入力すると最後のネーミングコメントがより具体的になります）', f_field: '分野', f_concept: 'コンセプト（2つまで）', f_none: '選択しない', h_comment: 'ネーミングコメント', fieldLabel: '分野', conceptLabel: 'コンセプト', h_memo: 'メモ', memoPh: 'この名前を選んだ理由、確認すること…', pdf: 'ブリーフをPDFで印刷／保存',
     disc: '参考情報であり法的助言ではありません。登録可能性は公式検索と専門家（弁理士）の確認でご確認ください。入力した名前はサーバーに保存されません。',
     free: '取得可', taken: '使用中', unknown: '不明', checking: '確認中…', comOk: '.com は取得できます', comNo: '.com はすでに使われています', domainNeedsLatin: 'ドメイン確認には英字の名前が必要です。下の英語表記案を押してみてください。',
     open: '開く', copyOpen: 'コピーして開く', st0: '未確認', st1: '問題なさそう', st2: '類似あり', st3: '同一あり', copied: '名前をコピーしました。検索欄に貼り付けてください。',
@@ -46,12 +47,32 @@ const t = (k) => (T[lang] && T[lang][k]) || T.ko[k] || k;
 const $ = (s) => document.querySelector(s);
 const el = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null) e.textContent = txt; return e; };
 
+function renderOpts() {
+  const sel = $('#field'); sel.textContent = '';
+  const none = el('option', null, t('f_none')); none.value = ''; sel.append(none);
+  FIELDS.forEach((f) => { const o = el('option', null, f[lang] || f.ko); o.value = f.k; sel.append(o); });
+  sel.value = state.field;
+  const box = $('#concepts'); box.textContent = '';
+  CONCEPTS.forEach((c) => { const b = el('button', state.concepts.includes(c.k) ? 'on' : '', c[lang] || c.ko); b.type = 'button'; b.dataset.k = c.k; b.addEventListener('click', () => { const i = state.concepts.indexOf(c.k); if (i >= 0) state.concepts.splice(i, 1); else { if (state.concepts.length >= 2) state.concepts.shift(); state.concepts.push(c.k); } renderOpts(); if (state.name) { renderComment(); renderMeta(); } }); box.append(b); });
+}
+function renderComment() {
+  const r = buildComment({ name: state.name, latin: state.latin, domains: state.domains, field: state.field, concepts: state.concepts, lang, romanCount: state.romanCount });
+  $('#cmVerdict').textContent = r.verdict; const ul = $('#cmList'); ul.textContent = '';
+  r.items.forEach((i) => ul.append(el('li', i.tone, i.text))); $('#cmRule').textContent = r.rule;
+}
+function renderMeta() {
+  const f = FIELDS.find((x) => x.k === state.field); const cs = state.concepts.map((k) => { const c = CONCEPTS.find((x) => x.k === k); return c[lang] || c.ko; });
+  const extra = [f ? `${t('fieldLabel')}: ${f[lang] || f.ko}` : '', cs.length ? `${t('conceptLabel')}: ${cs.join(', ')}` : ''].filter(Boolean).join(' · ');
+  $('#pdfMeta').textContent = `${t('nameLabel')}: ${state.name} · ${t('dateLabel')}: ${new Date().toLocaleDateString(lang === 'ja' ? 'ja-JP' : lang === 'en' ? 'en-US' : 'ko-KR')}` + (extra ? ` · ${extra}` : '');
+}
+
 function applyLang() {
   document.documentElement.lang = lang;
   document.querySelectorAll('[data-i18n]').forEach((n) => { n.textContent = t(n.dataset.i18n); });
   document.querySelectorAll('[data-i18n-ph]').forEach((n) => { n.placeholder = t(n.dataset.i18nPh); });
   document.querySelectorAll('.lang button').forEach((b) => b.classList.toggle('on', b.dataset.lang === lang));
   document.title = t('title') + ' · brand.arapshow.net';
+  renderOpts();
   if (state.name) render(false);
 }
 
@@ -97,7 +118,7 @@ function variants(base) {
 }
 
 // ---- 상태 ----
-const state = { name: '', latin: '', domains: {}, tm: {}, seed: 1 };
+const state = { name: '', latin: '', domains: {}, tm: {}, seed: 1, field: '', concepts: [], romanCount: 0 };
 const TLDS = ['com', 'net', 'org', 'kr'];
 const HAS_HANGUL = (s) => /[가-힣]/.test(s);
 const IS_LATIN = (s) => /^[a-z0-9-]+$/.test(s);
@@ -123,12 +144,12 @@ async function renderDomains() {
   try {
     const data = await fetchDomains([state.latin], TLDS); const d = data[state.latin] || {}; state.domains = d; box.textContent = '';
     TLDS.forEach((x) => box.append(chip(`${state.latin}.${x} · ${t(d[x] || 'unknown')}`, d[x] || 'unknown')));
-    stars(score(d)); $('#domainNote').textContent = d.com === 'free' ? t('comOk') : d.com === 'taken' ? t('comNo') : '';
+    stars(score(d)); $('#domainNote').textContent = d.com === 'free' ? t('comOk') : d.com === 'taken' ? t('comNo') : ''; renderComment();
   } catch { box.textContent = ''; $('#domainNote').textContent = t('unknown'); }
 }
 
 function renderEn() {
-  const sec = $('#sec-en'); const box = $('#enChips'); box.textContent = '';
+  const sec = $('#sec-en'); const box = $('#enChips'); box.textContent = ''; state.romanCount = HAS_HANGUL(state.name) ? romanVariants(state.name).length : 0;
   if (!HAS_HANGUL(state.name)) { sec.hidden = true; return; }
   sec.hidden = false;
   romanVariants(state.name).forEach((v) => { const b = el('button', 'chip', v); b.type = 'button'; b.title = t('pickToUse'); b.addEventListener('click', () => { $('#q').value = v; start(v); }); box.append(b); });
@@ -216,8 +237,8 @@ function toast(m) { const e = $('#toast'); e.textContent = m; e.classList.add('o
 
 function render(fetchNow) {
   $('#result').hidden = false;
-  $('#pdfMeta').textContent = `${t('nameLabel')}: ${state.name} · ${t('dateLabel')}: ${new Date().toLocaleDateString(lang === 'ja' ? 'ja-JP' : lang === 'en' ? 'en-US' : 'ko-KR')}`;
-  renderEn(); renderTm(); renderIdea(); renderLogos(); renderVariants();
+  renderMeta();
+  renderEn(); renderTm(); renderIdea(); renderLogos(); renderVariants(); renderComment();
   if (fetchNow) renderDomains();
 }
 function start(raw) {
@@ -233,6 +254,7 @@ function start(raw) {
 document.addEventListener('DOMContentLoaded', () => {});
 $('#form').addEventListener('submit', (e) => { e.preventDefault(); start($('#q').value); });
 $('#varBtn').addEventListener('click', checkVariants);
+$('#field').addEventListener('change', (e) => { state.field = e.target.value; if (state.name) { renderComment(); renderMeta(); } });
 $('#shuffle').addEventListener('click', () => { state.seed = (state.seed % 997) + 1; renderLogos(); });
 $('#pdf').addEventListener('click', () => {
   const memo = $('#memo'); memo.rows = Math.max(3, (memo.value.match(/\n/g) || []).length + 2);
