@@ -98,7 +98,7 @@ function variants(base) {
 
 // ---- 상태 ----
 const state = { name: '', latin: '', domains: {}, tm: {}, seed: 1 };
-const TLDS = ['com', 'net', 'co', 'io', 'kr'];
+const TLDS = ['com', 'net', 'org', 'kr'];
 const HAS_HANGUL = (s) => /[가-힣]/.test(s);
 const IS_LATIN = (s) => /^[a-z0-9-]+$/.test(s);
 
@@ -111,7 +111,7 @@ function stars(n) { const w = $('#domainStars'); w.textContent = ''; if (n == nu
 function score(d) {
   if (!d) return null; const f = (k) => d[k] === 'free';
   if (Object.values(d).every((v) => v === 'unknown')) return null;
-  return Math.max(1, (f('com') ? 3 : 0) + (f('net') ? 1 : 0) + ((f('co') || f('io') || f('kr')) ? 1 : 0));
+  return Math.max(1, (f('com') ? 3 : 0) + (f('net') ? 1 : 0) + ((f('org') || f('kr')) ? 1 : 0));
 }
 function chip(label, status, extra) { const c = el('span', 'chip ' + status, label); if (extra) c.title = extra; return c; }
 
