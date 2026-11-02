@@ -1,4 +1,4 @@
-import { FIELDS, CONCEPTS, buildComment } from './comment.js?v=1';
+import { FIELDS, CONCEPTS, buildComment } from './comment.js?v=3';
 // 브랜드 네이밍 리서치 — 화면 로직. 입력한 이름은 서버에 저장하지 않고, 도메인 조회만 /api/domain으로 중계한다.
 const T = {
   ko: { title: '브랜드 네이밍 리서치', sub: '이름을 짓기 전에, 먼저 가볍게 살펴보세요.', ph: '브랜드 이름 (한글·영문·일문)', go: '조사 시작',
@@ -6,8 +6,8 @@ const T = {
     h_domain: '도메인', h_tm: '상표 확인', tmNote: '같은 이름이 있는지, 소리·뜻이 비슷한 이름이 같은 분야에 있는지 보세요. 보신 뒤 체크해 두면 PDF에 담깁니다.',
     tip1: '같은 철자뿐 아니라 발음·뜻이 비슷한 이름도 거절 사유가 됩니다.', tip2: '내 상품·서비스와 같은 분야(니스 분류)에서 겹치는지가 핵심입니다.', tip3: "등록된 것뿐 아니라 '출원 중'인 것도 확인하세요.",
     h_en: '영어 표기 제안', enNote: '국어 로마자 표기법 기반의 기계 변환입니다. 뜻 번역은 하지 않습니다.', h_var: '.com 변형 제안', varBtn: '변형 도메인 조회',
-    h_idea: '발상 도우미 링크', h_logo: '심볼 + 로고 시안', logoNote: '발상용 시안입니다. 기존 로고와 비슷하지 않은지는 따로 확인하세요.', shuffle: '다시 섞기',
-    f_opt: '선택 입력 (안 해도 됩니다. 입력하면 마지막 네이밍 코멘트가 더 구체적이에요)', f_field: '분야', f_concept: '컨셉 (2개까지)', f_none: '선택 안 함', h_comment: '네이밍 코멘트', fieldLabel: '분야', conceptLabel: '컨셉', h_memo: '메모', memoPh: '이 이름을 고른 이유, 확인할 것…', pdf: '브리핑 PDF 인쇄 / 저장',
+    h_idea: '발상 도우미 링크', h_logo: '심볼 + 로고 폰트 느낌 보기', logoNote: '시안이 아니라 글꼴 느낌을 보는 용도예요. 마음에 드는 글꼴 이름은 카드 아래에 있어요.', shuffle: '다시 섞기',
+    f_opt: '선택 입력 (안 해도 됩니다. 입력하면 마지막 네이밍 코멘트가 더 구체적이에요)', f_field: '분야', f_concept: '컨셉 (2개까지)', f_none: '선택 안 함', h_comment: '네이밍 코멘트', fieldLabel: '분야', conceptLabel: '컨셉', pickTarget: '누르면 사려는 확장자로 선택돼요', tgOk: '{t} 사용 가능해요. 별점은 선택한 확장자 기준이에요.', tgNo: '{t}은 이미 사용 중이에요. 다른 확장자를 눌러 보세요.', h_memo: '메모', memoPh: '이 이름을 고른 이유, 확인할 것…', pdf: '브리핑 PDF 인쇄 / 저장',
     disc: '이 결과는 참고용이며 법률 자문이 아닙니다. 등록 가능성은 공식 검색과 전문가(변리사) 검토로 확인하세요. 입력한 이름은 서버에 저장하지 않습니다.',
     free: '가능', taken: '사용 중', unknown: '확인 불가', checking: '조회 중…', comOk: '.com 사용 가능', comNo: '.com은 이미 사용 중이에요', domainNeedsLatin: '영문 이름이 있어야 도메인을 조회할 수 있어요. 아래 영어 표기 제안을 눌러 보세요.',
     open: '열기', copyOpen: '복사 후 열기', st0: '미확인', st1: '깨끗해 보임', st2: '비슷한 것 있음', st3: '같은 것 있음', copied: '이름을 복사했어요. 검색창에 붙여넣으세요.',
@@ -19,8 +19,8 @@ const T = {
     h_domain: 'Domains', h_tm: 'Trademarks', tmNote: 'Look for identical names, and similar-sounding or similar-meaning names in your field. Tick your findings and they go into the PDF.',
     tip1: 'Similar sound or meaning can be grounds for refusal, not just identical spelling.', tip2: 'What matters is overlap in your own class of goods/services (Nice class).', tip3: "Check pending applications too, not only registered marks.",
     h_en: 'English spellings', enNote: 'Mechanical romanization (Revised Romanization). Meaning is not translated.', h_var: '.com variations', varBtn: 'Check variations',
-    h_idea: 'Idea-hunting links', h_logo: 'Symbol + logo drafts', logoNote: 'Drafts for inspiration. Check separately that they do not resemble existing logos.', shuffle: 'Shuffle',
-    f_opt: 'Optional (skip if you like. Filling these makes the final naming comments more specific)', f_field: 'Field', f_concept: 'Concept (up to 2)', f_none: 'Not selected', h_comment: 'Naming comments', fieldLabel: 'Field', conceptLabel: 'Concept', h_memo: 'Notes', memoPh: 'Why this name, what to verify…', pdf: 'Print / save brief as PDF',
+    h_idea: 'Idea-hunting links', h_logo: 'Symbol + logo font preview', logoNote: 'Not finished designs, just a feel for typefaces. The font name is under each card.', shuffle: 'Shuffle',
+    f_opt: 'Optional (skip if you like. Filling these makes the final naming comments more specific)', f_field: 'Field', f_concept: 'Concept (up to 2)', f_none: 'Not selected', h_comment: 'Naming comments', fieldLabel: 'Field', conceptLabel: 'Concept', pickTarget: 'Click to choose the extension you want', tgOk: '{t} is available. Stars are based on the selected extension.', tgNo: '{t} is taken. Try another extension.', h_memo: 'Notes', memoPh: 'Why this name, what to verify…', pdf: 'Print / save brief as PDF',
     disc: 'For reference only, not legal advice. Confirm registrability with official searches and an IP professional. The name you enter is not stored on a server.',
     free: 'free', taken: 'taken', unknown: 'unknown', checking: 'checking…', comOk: '.com is available', comNo: '.com is already taken', domainNeedsLatin: 'A Latin-letter name is needed to check domains. Try the English spellings below.',
     open: 'Open', copyOpen: 'Copy & open', st0: 'Not checked', st1: 'Looks clear', st2: 'Similar found', st3: 'Identical found', copied: 'Name copied. Paste it into the search box.',
@@ -32,8 +32,8 @@ const T = {
     h_domain: 'ドメイン', h_tm: '商標チェック', tmNote: '同じ名前、音や意味が似た名前が同じ分野にないか確認してください。チェックした内容はPDFに入ります。',
     tip1: '綴りが同じでなくても、音・意味が似ていると拒絶理由になります。', tip2: '自分の商品・サービスと同じ区分（ニース分類）で重なるかが重要です。', tip3: '登録済みだけでなく「出願中」も確認しましょう。',
     h_en: '英語表記の提案', enNote: '韓国語ローマ字表記による機械変換です。意味の翻訳はしません。', h_var: '.com の別案', varBtn: '別案のドメインを調べる',
-    h_idea: '発想のヒントリンク', h_logo: 'シンボル + ロゴ案', logoNote: '発想用の案です。既存のロゴに似ていないか別途確認してください。', shuffle: 'シャッフル',
-    f_opt: '任意入力（空でも可。入力すると最後のネーミングコメントがより具体的になります）', f_field: '分野', f_concept: 'コンセプト（2つまで）', f_none: '選択しない', h_comment: 'ネーミングコメント', fieldLabel: '分野', conceptLabel: 'コンセプト', h_memo: 'メモ', memoPh: 'この名前を選んだ理由、確認すること…', pdf: 'ブリーフをPDFで印刷／保存',
+    h_idea: '発想のヒントリンク', h_logo: 'シンボル + ロゴのフォント感', logoNote: 'デザイン案ではなく書体の雰囲気を見るためのものです。書体名はカードの下にあります。', shuffle: 'シャッフル',
+    f_opt: '任意入力（空でも可。入力すると最後のネーミングコメントがより具体的になります）', f_field: '分野', f_concept: 'コンセプト（2つまで）', f_none: '選択しない', h_comment: 'ネーミングコメント', fieldLabel: '分野', conceptLabel: 'コンセプト', pickTarget: '押すと購入したい拡張子として選択されます', tgOk: '{t} は取得できます。星は選択した拡張子が基準です。', tgNo: '{t} は使用中です。別の拡張子を押してください。', h_memo: 'メモ', memoPh: 'この名前を選んだ理由、確認すること…', pdf: 'ブリーフをPDFで印刷／保存',
     disc: '参考情報であり法的助言ではありません。登録可能性は公式検索と専門家（弁理士）の確認でご確認ください。入力した名前はサーバーに保存されません。',
     free: '取得可', taken: '使用中', unknown: '不明', checking: '確認中…', comOk: '.com は取得できます', comNo: '.com はすでに使われています', domainNeedsLatin: 'ドメイン確認には英字の名前が必要です。下の英語表記案を押してみてください。',
     open: '開く', copyOpen: 'コピーして開く', st0: '未確認', st1: '問題なさそう', st2: '類似あり', st3: '同一あり', copied: '名前をコピーしました。検索欄に貼り付けてください。',
@@ -56,7 +56,8 @@ function renderOpts() {
   CONCEPTS.forEach((c) => { const b = el('button', state.concepts.includes(c.k) ? 'on' : '', c[lang] || c.ko); b.type = 'button'; b.dataset.k = c.k; b.addEventListener('click', () => { const i = state.concepts.indexOf(c.k); if (i >= 0) state.concepts.splice(i, 1); else { if (state.concepts.length >= 2) state.concepts.shift(); state.concepts.push(c.k); } renderOpts(); if (state.name) { renderComment(); renderMeta(); } }); box.append(b); });
 }
 function renderComment() {
-  const r = buildComment({ name: state.name, latin: state.latin, domains: state.domains, field: state.field, concepts: state.concepts, lang, romanCount: state.romanCount });
+  const r = buildComment({ name: state.name, latin: state.latin, domains: state.domains, target: state.target, field: state.field, concepts: state.concepts, lang, romanCount: state.romanCount, tm: state.tm });
+  stars(r.stars); $('#cmStarNote').textContent = r.starNote;
   $('#cmVerdict').textContent = r.verdict; const ul = $('#cmList'); ul.textContent = '';
   r.items.forEach((i) => ul.append(el('li', i.tone, i.text))); $('#cmRule').textContent = r.rule;
 }
@@ -118,7 +119,7 @@ function variants(base) {
 }
 
 // ---- 상태 ----
-const state = { name: '', latin: '', domains: {}, tm: {}, seed: 1, field: '', concepts: [], romanCount: 0 };
+const state = { name: '', latin: '', target: 'com', domains: {}, tm: {}, seed: 1, field: '', concepts: [], romanCount: 0 };
 const TLDS = ['com', 'net', 'org', 'kr'];
 const HAS_HANGUL = (s) => /[가-힣]/.test(s);
 const IS_LATIN = (s) => /^[a-z0-9-]+$/.test(s);
@@ -128,23 +129,27 @@ async function fetchDomains(names, tlds) {
   if (!r.ok) throw new Error('domain');
   return r.json();
 }
-function stars(n) { const w = $('#domainStars'); w.textContent = ''; if (n == null) return; w.append('★'.repeat(n)); const i = el('i', null, '★'.repeat(5 - n)); w.append(i); w.title = `${n}/5`; }
-function score(d) {
-  if (!d) return null; const f = (k) => d[k] === 'free';
-  if (Object.values(d).every((v) => v === 'unknown')) return null;
-  return Math.max(1, (f('com') ? 3 : 0) + (f('net') ? 1 : 0) + ((f('org') || f('kr')) ? 1 : 0));
-}
+function stars(n) { const w = $('#cmStars'); w.textContent = ''; if (n == null) return; w.append('★'.repeat(n)); const i = el('i', null, '★'.repeat(5 - n)); w.append(i); w.title = `${n}/5`; }
 function chip(label, status, extra) { const c = el('span', 'chip ' + status, label); if (extra) c.title = extra; return c; }
 
+function drawDomains() {
+  const d = state.domains || {}; const box = $('#domainChips'); box.textContent = '';
+  TLDS.forEach((x) => {
+    const st = d[x] || 'unknown'; const b = el('button', 'chip ' + st + (state.target === x ? ' target' : ''), `${state.latin}.${x} · ${t(st)}${state.target === x ? ' ✓' : ''}`);
+    b.type = 'button'; b.title = t('pickTarget'); b.addEventListener('click', () => { state.target = x; state.picked = true; drawDomains(); renderComment(); }); box.append(b);
+  });
+  const tg = '.' + state.target; const st = d[state.target];
+  $('#domainNote').textContent = st === 'free' ? t('tgOk').replace('{t}', tg) : st === 'taken' ? t('tgNo').replace('{t}', tg) : t('pickTarget');
+}
 async function renderDomains() {
-  const box = $('#domainChips'); box.textContent = ''; stars(null);
+  const box = $('#domainChips'); box.textContent = '';
   if (!state.latin) { $('#domainNote').textContent = t('domainNeedsLatin'); return; }
   $('#domainNote').textContent = '';
   TLDS.forEach((x) => box.append(chip(`${state.latin}.${x} · ${t('checking')}`, 'loading')));
   try {
-    const data = await fetchDomains([state.latin], TLDS); const d = data[state.latin] || {}; state.domains = d; box.textContent = '';
-    TLDS.forEach((x) => box.append(chip(`${state.latin}.${x} · ${t(d[x] || 'unknown')}`, d[x] || 'unknown')));
-    stars(score(d)); $('#domainNote').textContent = d.com === 'free' ? t('comOk') : d.com === 'taken' ? t('comNo') : ''; renderComment();
+    const data = await fetchDomains([state.latin], TLDS); state.domains = data[state.latin] || {};
+    if (!state.picked) { const d = state.domains; state.target = ['com', 'net', 'org', 'kr'].find((x) => d[x] === 'free') || 'com'; }
+    drawDomains(); renderComment();
   } catch { box.textContent = ''; $('#domainNote').textContent = t('unknown'); }
 }
 
@@ -186,7 +191,7 @@ function renderTm() {
     a.addEventListener('click', () => { if (s.copy) { try { navigator.clipboard.writeText(state.name); } catch {} toast(t('copied')); } });
     const sel = el('select'); sel.setAttribute('aria-label', t('s' + s.k));
     [0, 1, 2, 3].forEach((i) => { const o = el('option', null, t('st' + i)); o.value = i; sel.append(o); });
-    sel.value = state.tm[s.k] || 0; sel.addEventListener('change', () => { state.tm[s.k] = sel.value; });
+    sel.value = state.tm[s.k] || 0; sel.addEventListener('change', () => { state.tm[s.k] = sel.value; renderComment(); });
     row.append(a, sel); c.append(row); box.append(c);
   });
 }
@@ -199,34 +204,34 @@ function renderIdea() {
 // ---- 로고 시안(브라우저 안에서 SVG 생성) ----
 function rng(seed) { let s = seed >>> 0; return () => { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
 const PAL = [['#1f4d43', '#f6f1e7', '#d9a441'], ['#14213d', '#fca311', '#ffffff'], ['#7a1f2b', '#f4e9d8', '#c9a227'], ['#0b3954', '#bfd7ea', '#ff6663'], ['#2b2d42', '#edf2f4', '#ef233c'], ['#3d405b', '#f4f1de', '#e07a5f'], ['#005f73', '#e9d8a6', '#ee9b00'], ['#222222', '#ffffff', '#00a878'], ['#4a2c6d', '#f3e9ff', '#ffb347']];
-const FONTS_LAT = ['Jost', 'Space Grotesk', 'DM Serif Display'];
-function fontFor(name, r) {
-  if (HAS_HANGUL(name)) return ['Noto Serif KR', 'Black Han Sans', 'IBM Plex Sans KR'][Math.floor(r() * 3)];
-  if (/[぀-ヿ一-鿿]/.test(name)) return ['Noto Sans JP'][0];
-  return FONTS_LAT[Math.floor(r() * FONTS_LAT.length)];
+const FONTS_LAT = ['Jost', 'Space Grotesk', 'DM Serif Display', 'Playfair Display', 'Bebas Neue', 'Cormorant Garamond', 'Poppins', 'Syne', 'Abril Fatface'];
+const FONTS_KO = ['Noto Serif KR', 'Black Han Sans', 'IBM Plex Sans KR', 'Do Hyeon', 'Jua', 'Gowun Batang', 'Nanum Myeongjo', 'Gothic A1', 'Nanum Pen Script'];
+const FONTS_JA = ['Noto Sans JP', 'Noto Serif JP', 'Zen Maru Gothic', 'Shippori Mincho', 'Dela Gothic One', 'Kosugi Maru', 'M PLUS Rounded 1c', 'Zen Antique', 'Yusei Magic'];
+function fontFor(name, i, seed) {
+  const list = HAS_HANGUL(name) ? FONTS_KO : /[\u3040-\u30ff\u4e00-\u9fff]/.test(name) ? FONTS_JA : FONTS_LAT;
+  return list[(i + seed * 3) % list.length];
 }
 const esc = (s) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 function logoSvg(name, i, seed) {
-  const r = rng(seed * 97 + i * 31 + 7); const [c1, c2, c3] = PAL[Math.floor(r() * PAL.length)]; const font = fontFor(name, r);
-  const ch = esc([...name][0] || '?'); const up = IS_LATIN(name.toLowerCase().replace(/\s/g, '')) && r() < 0.5; const word = esc(up ? name.toUpperCase() : name);
-  const shape = Math.floor(r() * 5); const layout = Math.floor(r() * 3); const fs = word.length > 8 ? 30 : 38; const ls = up ? 4 : 0;
+  const r = rng(seed * 97 + i * 31 + 7); const [c1, c2, c3] = PAL[Math.floor(r() * PAL.length)]; const font = fontFor(name, i, seed);
+  const ch = esc([...name][0] || '?'); const up = IS_LATIN(name.toLowerCase().replace(/\s/g, '')) && r() < 0.4; const word = esc(up ? name.toUpperCase() : name);
+  const shape = Math.floor(r() * 4); const layout = i % 3; const fs = word.length > 8 ? 30 : 38; const ls = up ? 3 : 0;
+  // 배경색 없이: 글자 색(c1)과 포인트 색(c3)만 쓴다. 글꼴 구경이 목적이라 심볼은 선으로만.
   const sym = (cx, cy, s) => {
-    const m = `<text x="${cx}" y="${cy + s * 0.18}" text-anchor="middle" font-family="'${font}'" font-weight="700" font-size="${s * 0.62}" fill="${c2}">${ch}</text>`;
-    const sh = [`<circle cx="${cx}" cy="${cy}" r="${s / 2}" fill="${c1}"/>`, `<rect x="${cx - s / 2}" y="${cy - s / 2}" width="${s}" height="${s}" rx="${s * 0.14}" fill="${c1}"/>`, `<rect x="${cx - s / 2}" y="${cy - s / 2}" width="${s}" height="${s}" rx="${s / 2}" ry="${s / 2}" transform="rotate(45 ${cx} ${cy})" fill="${c1}"/>`, `<path d="M${cx} ${cy - s / 2}L${cx + s / 2} ${cy + s / 2}H${cx - s / 2}Z" fill="${c1}"/>`, `<path d="M${cx - s / 2} ${cy + s / 2}V${cy - s / 8}A${s / 2} ${s / 2} 0 0 1 ${cx + s / 2} ${cy - s / 8}V${cy + s / 2}Z" fill="${c1}"/>`][shape];
-    const dot = `<circle cx="${cx + s * 0.42}" cy="${cy - s * 0.42}" r="${s * 0.09}" fill="${c3}"/>`;
-    return sh + (shape === 3 ? `<text x="${cx}" y="${cy + s * 0.42}" text-anchor="middle" font-family="'${font}'" font-weight="700" font-size="${s * 0.46}" fill="${c2}">${ch}</text>` : m) + dot;
+    const sh = [`<circle cx="${cx}" cy="${cy}" r="${s / 2}" fill="none" stroke="${c1}" stroke-width="3"/>`, `<rect x="${cx - s / 2}" y="${cy - s / 2}" width="${s}" height="${s}" rx="${s * 0.14}" fill="none" stroke="${c1}" stroke-width="3"/>`, `<rect x="${cx - s / 2}" y="${cy - s / 2}" width="${s}" height="${s}" transform="rotate(45 ${cx} ${cy})" fill="none" stroke="${c1}" stroke-width="3"/>`, `<path d="M${cx} ${cy - s / 2}L${cx + s / 2} ${cy + s / 2}H${cx - s / 2}Z" fill="none" stroke="${c1}" stroke-width="3" stroke-linejoin="round"/>`][shape];
+    return sh + `<text x="${cx}" y="${cy + s * (shape === 3 ? 0.36 : 0.2)}" text-anchor="middle" font-family="'${font}'" font-weight="700" font-size="${s * (shape === 3 ? 0.4 : 0.58)}" fill="${c1}">${ch}</text><circle cx="${cx + s * 0.46}" cy="${cy - s * 0.46}" r="${s * 0.08}" fill="${c3}"/>`;
   };
-  let body = '';
   const txt = (x, y, anc, size) => `<text x="${x}" y="${y}" text-anchor="${anc}" font-family="'${font}'" font-weight="700" font-size="${size}" letter-spacing="${ls}" fill="${c1}">${word}</text>`;
-  if (layout === 0) body = sym(46, 60, 52) + txt(86, 72, 'start', fs);
-  else if (layout === 1) body = sym(160, 44, 50) + txt(160, 112, 'middle', fs) + `<rect x="130" y="124" width="60" height="3" fill="${c3}"/>`;
-  else body = `<rect x="14" y="18" width="292" height="84" rx="12" fill="${c1}"/>` + `<text x="160" y="72" text-anchor="middle" font-family="'${font}'" font-weight="700" font-size="${fs}" letter-spacing="${ls}" fill="${c2}">${word}</text><circle cx="${290 - 0}" cy="30" r="6" fill="${c3}"/>`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 140" role="img" aria-label="${esc(name)}"><rect width="320" height="140" fill="${layout === 2 ? c2 : '#ffffff'}"/>${body}</svg>`;
+  let body = '';
+  if (layout === 0) body = sym(44, 70, 50) + txt(84, 82, 'start', fs);
+  else if (layout === 1) body = sym(160, 44, 48) + txt(160, 112, 'middle', fs) + `<rect x="132" y="122" width="56" height="3" fill="${c3}"/>`;
+  else body = txt(160, 82, 'middle', fs + 4) + `<rect x="60" y="94" width="200" height="3" fill="${c3}"/>`;
+  return { svg: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 140" role="img" aria-label="${esc(name)}">${body}</svg>`, font };
 }
 function renderLogos() {
   const box = $('#logos'); box.textContent = '';
-  for (let i = 0; i < 6; i++) {
-    const w = el('div', 'logo'); w.innerHTML = logoSvg(state.name, i, state.seed);
+  for (let i = 0; i < 9; i++) {
+    const w = el('div', 'logo'); const L = logoSvg(state.name, i, state.seed); w.innerHTML = L.svg; w.append(el('span', 'fname', L.font));
     const b = el('button', 'no-print', 'SVG'); b.type = 'button';
     b.addEventListener('click', () => { const blob = new Blob([w.querySelector('svg').outerHTML], { type: 'image/svg+xml' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `${state.latin || 'brand'}-logo-${i + 1}.svg`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); toast(t('saved')); });
     w.append(b); box.append(w);
@@ -243,7 +248,7 @@ function render(fetchNow) {
 }
 function start(raw) {
   const name = (raw || '').trim().replace(/\s+/g, ' '); if (!name) return;
-  state.name = name; state.tm = {}; state.seed = 1;
+  state.name = name; state.tm = {}; state.seed = 1; state.picked = false; state.target = 'com';
   const compact = name.toLowerCase().replace(/[\s_]/g, '');
   state.latin = IS_LATIN(compact) && !HAS_HANGUL(name) ? compact : '';
   if (!state.latin && HAS_HANGUL(name)) { state.linked = new Map(); const v = romanVariants(name)[0]; state.latin = IS_LATIN(v || '') ? v : ''; }
